@@ -20,6 +20,9 @@ const AddUser = () => {
             .then(res => res.json())
             .then(data => {
                 console.log('Success : ', data);
+                alert('User added to the mongodb-atlas server successfully');
+
+                event.target.reset();/* -----input field take faka kore felbe data input debar por------ */
             })
     };
 

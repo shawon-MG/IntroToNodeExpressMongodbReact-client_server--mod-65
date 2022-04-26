@@ -36,10 +36,12 @@ async function run() {
         /* ------------------------------------------------------------------------------
                     Ekhn client side the data niye database e CRUD operation  calabo
         --------------------------------------------------------------------------------------------- */
-        app.post('/user', (req, res) => {
+        app.post('/user', async (req, res) => {
             const newUser = req.body;
             console.log('Adding New User : ', newUser);
-            res.send({ result: 'Backend received data from Frontend' })  /*-----frontend theke jei data ta asche seta hocche json--> .then(res => res.json()) . Ar amra jani json array / object akare data pathay. tai ekhane res.send er moddhe object akare output dekhate hoyeche.-----  */
+            const result = await userCollection.insertOne(newUser);
+            res.send(result)
+            /*-----frontend theke jei data ta asche seta hocche json--> .then(res => res.json()) . Ar amra jani json array / object akare data pathay. tai ekhane res.send er moddhe object akare output dekhate hoyeche.-----  */
         });
     }
     finally {

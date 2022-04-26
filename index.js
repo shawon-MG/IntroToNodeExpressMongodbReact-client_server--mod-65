@@ -36,12 +36,20 @@ async function run() {
         /* ------------------------------------------------------------------------------
                     Ekhn client side the data niye database e CRUD operation  calabo
         --------------------------------------------------------------------------------------------- */
+        // POST API : ( Data added process to the server )
         app.post('/user', async (req, res) => {
             const newUser = req.body;
             console.log('Adding New User : ', newUser);
             const result = await userCollection.insertOne(newUser);
             res.send(result)
             /*-----frontend theke jei data ta asche seta hocche json--> .then(res => res.json()) . Ar amra jani json array / object akare data pathay. tai ekhane res.send er moddhe object akare output dekhate hoyeche.-----  */
+        });
+        // GET : ( front end theke pathano data jeta, mongo server stored chilo seta, niye ese Node er server-->localhost:5000 dekhano )
+        app.get('/user', async (req, res) => {
+            const query = {};
+            const cursor = userCollection.find(query);
+            const users = await cursor.toArray();
+            res.send(users);
         });
     }
     finally {

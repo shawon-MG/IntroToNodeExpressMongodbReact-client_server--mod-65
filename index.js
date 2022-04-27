@@ -12,6 +12,7 @@ app.use(express.json());
 ----------------------------------------------------------------*/
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
+const ObjectId = require('mongodb').ObjectId; /*----- It's for deleting a user by id--------- */
 
 const uri = "mongodb+srv://dbuser1:kQy8VZ31fZZ4V7kn@cluster0.m8chh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
@@ -44,13 +45,22 @@ async function run() {
             res.send(result)
             /*-----frontend theke jei data ta asche seta hocche json--> .then(res => res.json()) . Ar amra jani json array / object akare data pathay. tai ekhane res.send er moddhe object akare output dekhate hoyeche.-----  */
         });
-        // GET : ( front end theke pathano data jeta, mongo server stored chilo seta, niye ese Node er server-->localhost:5000 dekhano )
+
+        // GET API : ( front end theke pathano data jeta, mongo database e stored chilo seta, niye ese Node er server-->localhost:5000 dekhano )
         app.get('/user', async (req, res) => {
             const query = {};
             const cursor = userCollection.find(query);
             const users = await cursor.toArray();
             res.send(users);
         });
+
+        // Delete a user :
+        app.delete('/user/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await userCollection.deleteOne(query);
+            res.send(result);
+        })
     }
     finally {
         // await client.close();  

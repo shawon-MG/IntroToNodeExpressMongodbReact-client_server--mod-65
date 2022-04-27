@@ -12,7 +12,7 @@ app.use(express.json());
 ----------------------------------------------------------------*/
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const ObjectId = require('mongodb').ObjectId; /*----- It's for deleting a user by id--------- */
+const ObjectId = require('mongodb').ObjectId; /*----- It's for finding a user by id--------- */
 
 const uri = "mongodb+srv://dbuser1:kQy8VZ31fZZ4V7kn@cluster0.m8chh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
@@ -60,7 +60,33 @@ async function run() {
             const query = { _id: ObjectId(id) };
             const result = await userCollection.deleteOne(query);
             res.send(result);
-        })
+        });
+
+        // GET API: ( sudhu ekta user er data load korbo tar _id diye  )
+        app.get('/user/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await userCollection.findOne(query);
+            res.send(result);
+        });
+
+        // PUT API: ( exsisting data ke update korar jonno )
+        app.put('/user/:id', async (req, res) => {
+            const id = req.params.id;
+            const updatedUser = req.body;
+            console.log(updatedUser);
+
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updatedDoc = {
+                $set: {
+                    name: updatedUser.name,
+                    email: updatedUser.email
+                }
+            };
+            const result = await userCollection.updateOne(filter, updatedDoc, options);
+            res.send(result);
+        });
     }
     finally {
         // await client.close();  

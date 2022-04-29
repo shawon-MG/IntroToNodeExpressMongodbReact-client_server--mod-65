@@ -9,15 +9,11 @@ const cors = require('cors'); /* ----It makes connection between client side (po
 app.use(cors());
 
 app.use(express.json());
-/*----------------------------------------------
-         user:       dbuser1
-         password:   kQy8VZ31fZZ4V7kn
-----------------------------------------------------------------*/
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const ObjectId = require('mongodb').ObjectId; /*----- It's for finding a user by id--------- */
 
-const uri = "mongodb+srv://dbuser1:kQy8VZ31fZZ4V7kn@cluster0.m8chh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.m8chh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 // client.connect(err => {
 //     const collection = client.db("Node-Express-MongoDB").collection("users");
